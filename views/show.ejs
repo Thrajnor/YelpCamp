@@ -1,0 +1,50 @@
+<% include partials/header %>
+
+<div class="container">
+  
+  <header class="jumbotron">
+    <div class="container">
+      <h1>Welcome To YelpCamp!</h1>
+      <p>view our hand-picked campgrounds form all over the world</p>
+      <p><a href="/campgrounds/new" class="btn btn-primary btn-md">Create New Campground</a></p>
+    </div>
+  </header>
+  
+  <div class="row text-center" style="display:flex; flex-wrap:wrap;">
+    <% for (var i = 0; i < campgrounds.length; i++) {%>
+        <div class="col-md-12 col-sm-12">
+            <div class="img-thumbnail img-fluid">
+              <img class="img-thumbnail img-fluid" src="<%= campgrounds[i].image %>">
+              <h4><%= campgrounds[i].name %></h4>
+              <p><%= campgrounds[i].desc %></p>
+              <!--EDIT CAMPGROUND-->
+              <div class="container d-none" id="editForm">
+                  <h3 class="text-center py-3">Edit your Campground</h1>
+                  <div class="row text-center">
+                      <div class="col-lg-4"></div>
+                      <form action="/campgrounds/edit" method="POST" class="col-lg-4">
+                          <div class="form-group">
+                          <input type="text" class="form-control" name="name" placeholder="Name of a camp" value="<%=campgrounds[i].name%>" required>
+                          </div>
+                          <div class="form-group">
+                          <input type="text" class="form-control" name="image" placeholder="Url of an image" value="<%=campgrounds[i].image%>" required>
+                          </div>
+                          <div class="form-group">
+                          <input type="text" class="form-control" name="desc" placeholder="Description of a campground" value="<%=campgrounds[i].desc%>" required>
+                          </div>
+                          <div class="form-group">
+                          <button class="btn btn-lg btn-success btn-block">Submit</button>
+                          </div>
+                      </form>
+                      <div class="col-lg-4"></div>
+                  </div>
+              </div>
+              <!--END EDIT CAMPGROUND-->
+              <button id="edit" class="btn btn-md btn-warning">Edit Campground</button>
+            </div>
+        </div>
+    <% }; %>
+  </div>
+</div>
+
+<% include partials/footer %>
