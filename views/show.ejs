@@ -1,50 +1,95 @@
 <% include partials/header %>
 
-<div class="container">
-  
-  <header class="jumbotron">
-    <div class="container">
-      <h1>Welcome To YelpCamp!</h1>
-      <p>view our hand-picked campgrounds form all over the world</p>
-      <p><a href="/campgrounds/new" class="btn btn-primary btn-md">Create New Campground</a></p>
+<div class="container" id='show'>
+  <div class="row" style="display:flex; flex-wrap:wrap;">
+    <div class='col-lg-3 col-md-12 mt-3'>
+      <p class='lead text-left'>YelpCamp</p>
+      <ul class='list-group'>
+        <li class='list-group-item active'>Item 1</li>
+        <li class='list-group-item'>Item 2</li>
+        <li class='list-group-item'>Item 3</li>
+      </ul>
+      <div id="map"></div>
     </div>
-  </header>
-  
-  <div class="row text-center" style="display:flex; flex-wrap:wrap;">
-    <% for (var i = 0; i < campgrounds.length; i++) {%>
-        <div class="col-md-12 col-sm-12">
-            <div class="img-thumbnail img-fluid">
-              <img class="img-thumbnail img-fluid" src="<%= campgrounds[i].image %>">
-              <h4><%= campgrounds[i].name %></h4>
-              <p><%= campgrounds[i].desc %></p>
-              <!--EDIT CAMPGROUND-->
-              <div class="container d-none" id="editForm">
-                  <h3 class="text-center py-3">Edit your Campground</h1>
-                  <div class="row text-center">
-                      <div class="col-lg-4"></div>
-                      <form action="/campgrounds/edit" method="POST" class="col-lg-4">
-                          <div class="form-group">
-                          <input type="text" class="form-control" name="name" placeholder="Name of a camp" value="<%=campgrounds[i].name%>" required>
-                          </div>
-                          <div class="form-group">
-                          <input type="text" class="form-control" name="image" placeholder="Url of an image" value="<%=campgrounds[i].image%>" required>
-                          </div>
-                          <div class="form-group">
-                          <input type="text" class="form-control" name="desc" placeholder="Description of a campground" value="<%=campgrounds[i].desc%>" required>
-                          </div>
-                          <div class="form-group">
-                          <button class="btn btn-lg btn-success btn-block">Submit</button>
-                          </div>
-                      </form>
-                      <div class="col-lg-4"></div>
-                  </div>
-              </div>
-              <!--END EDIT CAMPGROUND-->
-              <button id="edit" class="btn btn-md btn-warning">Edit Campground</button>
+    <div class="col-lg-9 col-md-12 mt-3">
+      <div class="img-thumbnail">
+        <div id='imageContainer'>
+          <img class="img-responsive" id='image' src="<%= campground.image %>">
+        </div>
+        <div class='caption-full text-center'>
+          <h4 class='float-left'><%= campground.name %></h4>
+          <h4 class='text-right'>$9.00/night</h4>
+          <p><%- campground.desc %></p>
+        </div>
+        <!--EDIT AND DELETE BUTTONS================================================================-->
+        <div class='text-right'>
+            <span class='float-left'><a href='/campgrounds/<%=campground._id%>/delete' class='btn btn-md btn-danger ml-3'>DELETE</a></span>
+            <span><button id="editButton" class="btn btn-md btn-warning mr-3">Edit Campground</button></span>
+        </div>
+        <!--EDIT CAMPGROUND========================================================================-->
+        <div class="showForm" id="editForm">
+            <h3 class="text-center py-3">Edit your Campground</h3>
+            <div class="row text-center">
+                <div class="col-lg-2"></div>
+                <form action="/campgrounds/<%=campground._id%>/edit" method="POST" class="col-lg-8">
+                    <div class="form-group">
+                      <input type="text" class="form-control" name="camp[name]" placeholder="Name of a camp" value="<%=campground.name%>" required>
+                    </div>
+                    <div class="form-group">
+                      <input type="text" class="form-control" name="camp[image]" placeholder="Url of an image" value="<%=campground.image%>" required>
+                    </div>
+                    <div class="form-group">
+                      <textarea rows='4' class="form-control" name="camp[desc]" placeholder='Description for your Camp' required><%=campground.desc%></textarea>
+                    </div>
+                    <div class="form-group">
+                      <button class="btn btn-lg btn-success btn-block">Submit</button>
+                    </div>
+                </form>
+                <div class="col-lg-2"></div>
             </div>
         </div>
-    <% }; %>
+      </div>
+      <!--COMMENT SECTION==========================================================================-->
+      <div class='p-3 mb-2 text-center' id='commentsection'>
+        <div class='text-right'>
+          <button id='commentButton' class="btn btn-md btn-success mr-3">Leave a Review</button>
+        </div>
+        <form action="/campgrounds/<%=campground._id%>/comment" method="POST" class='img-thumbnail img-fluid p-2 mt-3 showForm' id='commentForm'>
+          <div class="form-group">
+            <input type="text" class="form-control" name="comment[author]" placeholder="Your Name" value="<%=author%>" required>
+          </div>
+          <div class="form-group">
+            <textarea rows='3' class="form-control" name="comment[text]" placeholder='Your comment' required></textarea>
+          </div>
+          <div class="form-group">
+            <button class="btn btn-lg btn-success btn-block" >Submit</button>
+          </div>
+        </form>
+        <% campground.comments.forEach(function (comment) { %>
+          <div class="img-thumbnail img-fluid mt-3">
+            <h3><strong><%=comment.author%></strong></h3>
+            <p><%-comment.text%></p>
+          </div>
+        <% }) %>
+      </div>
+    </div>
   </div>
 </div>
+<script>
+  function initMap() {
+    var uluru = {lat: -25.363, lng: 131.044};
+    var map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 4,
+      center: uluru
+    });
+    var marker = new google.maps.Marker({
+      position: uluru,
+      map: map
+    });
+  }
+</script>
+<script async defer
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDlguSPFtkflgCIHDmQMW44PE56ER4CCSY&callback=initMap">
+</script>
 
 <% include partials/footer %>

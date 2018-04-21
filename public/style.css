@@ -1,3 +1,6 @@
+* {
+  box-sizing: border-box;
+}
 body {
     width: 100%;
     height: 100%;
@@ -16,3 +19,43 @@ a:hover {
     text-decoration: none;
     color:black;
 }
+.text-align-center {
+    text-align: center;
+}
+
+/*SHOW PAGE ====================================================================*/
+#show {
+    margin-top:4%;
+}
+#delete {
+    margin-top: 15%;
+    margin-bottom: 3%;
+}
+#commentsection {
+    background-color: #e5e5e5;
+}
+.showForm {
+    display: none;
+}
+#map {
+    width: 100%;
+    height: 15rem;
+    margin-top: 2rem;
+}
+.img-thumbnail {
+    padding: 0;
+}
+
+#image {
+    bottom: -70px;
+    width: 100%;
+    position: absolute;
+    text-align: left;
+}
+#imageContainer {
+    width: 100%;
+    max-height: 33rem;
+    overflow: hidden;
+    position: relative;
+}
+/*END SHOW PAGE ================================================================*/
