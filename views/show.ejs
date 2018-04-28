@@ -16,15 +16,15 @@
         <div id='imageContainer'>
           <img class="img-responsive" id='image' src="<%= campground.image %>">
         </div>
-        <div class='caption-full text-center'>
-          <h4 class='float-left'><%= campground.name %></h4>
+        <div class='caption-full text-center p-3'>
+          <a><h4 class='float-left'><%= campground.name %></h4></a>
           <h4 class='text-right'>$9.00/night</h4>
           <p><%- campground.desc %></p>
-        </div>
         <!--EDIT AND DELETE BUTTONS================================================================-->
-        <div class='text-right'>
-            <span class='float-left'><a href='/campgrounds/<%=campground._id%>/delete' class='btn btn-md btn-danger ml-3'>DELETE</a></span>
-            <span><button id="editButton" class="btn btn-md btn-warning mr-3">Edit Campground</button></span>
+            <div class='text-right'>
+                <span class='float-left'><a href='/campgrounds/<%=campground._id%>/delete' class='btn btn-md btn-danger ml-3'>DELETE</a></span>
+                <span><button id="editButton" class="btn btn-md btn-warning mr-3">Edit Campground</button></span>
+            </div>
         </div>
         <!--EDIT CAMPGROUND========================================================================-->
         <div class="showForm" id="editForm">
