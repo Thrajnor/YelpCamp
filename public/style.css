@@ -7,6 +7,7 @@ body {
     font-size: 16px;
     margin: 0;
     padding: 0;
+    overflow: hidden;
 }
 li {
     list-style: none;
@@ -17,16 +18,22 @@ a {
 }
 a:hover {
     text-decoration: none;
-    color:black;
+    color: #5b5b5b;
 }
 .text-align-center {
     text-align: center;
 }
+.mt-6 {
+    margin-top: 4em;
+}
+.mt-7 {
+    margin-top: 5em;
+}
+.mt-8 {
+    margin-top: 6em;
+}
 
 /*SHOW PAGE ====================================================================*/
-#show {
-    margin-top:4%;
-}
 #delete {
     margin-top: 15%;
     margin-bottom: 3%;
