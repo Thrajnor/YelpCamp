@@ -10,6 +10,10 @@ function init() {
     $('#commentForm').slideToggle('350')
   })
 
+  $('#commentEditButton').on('click', function() {
+    $('#commentEditForm').slideToggle()('350')
+  })
+
   function resizingImageContainer() {
     var height = $('#image').height() - 70
     height = Math.floor(height)

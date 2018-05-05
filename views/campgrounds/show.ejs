@@ -12,6 +12,7 @@
       <div id="map"></div>
     </div>
     <div class="col-lg-9 col-md-12">
+      <!--CAMPGROUND BODY =========================================================================-->
       <div class="img-thumbnail">
         <div id='imageContainer'>
           <img class="img-responsive" id='image' src="<%= campground.image %>">
@@ -22,23 +23,21 @@
             <h4 class='text-right'>$9.00/night</h4>
           </span>
           <p><%- campground.desc %></p>
-          
-        <!--EDIT AND DELETE BUTTONS================================================================-->
+        <!--EDIT AND DELETE BUTTONS=========================-->
             <div>
-                <% if(currentUser == undefined) { %>
-                <% } else if (currentUser.id == campground.author.id) {%>
+                <% if (currentUser && currentUser.id == campground.author.id) {%>
                   <span class='float-left'><a href='/campgrounds/<%=campground._id%>/delete' class='btn btn-sm btn-danger ml-3'>DELETE</a></span>
                   <span class='float-right'><button id="editButton" class="btn btn-sm btn-warning mr-3">EDIT</button></span>
                 <% } %>
                 <p class='text-center m-auto pt-1 font-italic'>By <%= campground.author.username %></p>
             </div>
         </div>
-        <!--EDIT CAMPGROUND========================================================================-->
+        <!--EDIT CAMPGROUND=================================-->
         <div class="showForm" id="editForm">
             <h3 class="text-center py-3">Edit your Campground</h3>
             <div class="row text-center">
                 <div class="col-lg-2"></div>
-                <form action="/campgrounds/<%=campground._id%>/edit" method="POST" class="col-lg-8">
+                <form action="/campgrounds/<%=campground._id%>?_method=PUT" method="POST" class="col-lg-8">
                     <div class="form-group">
                       <input type="text" class="form-control" name="camp[name]" placeholder="Name of a camp" value="<%=campground.name%>" required>
                     </div>
@@ -70,11 +69,33 @@
             <button class="btn btn-lg btn-success btn-block" >Submit</button>
           </div>
         </form>
-        <!--COMENTS =========================================-->
+        <!--COMMENTS =======================================-->
         <% campground.comments.forEach(function (comment) { %>
-          <div class="img-thumbnail img-fluid mt-3">
+          <div class="position-relative img-thumbnail img-fluid mt-3">
+            <!--COMMENT BODY ===============================-->
             <h3><strong><%=comment.author.username%></strong></h3>
             <p class='px-2'><%-comment.text%></p>
+            <!--COMMENT BUTTONS=============================-->
+            <% if (currentUser && currentUser.id == comment.author.id) { %>
+              <div class='position-absolute m-1' id="commentDeleteButton"><a href='/campgrounds/<%=campground._id%>/comments/<%=comment._id%>/delete' class='btn btn-sm btn-danger'>DELETE</a></div>
+              <div class='position-absolute m-1 mt-2' id="commentEditButton"><button id="commentEditButton" class="btn btn-sm btn-warning">EDIT</button></div>
+              <!--EDIT COMMENT==============================-->
+              <div class="showForm" id="commentEditForm">
+                  <h3 class="text-center py-3">Edit your comment</h3>
+                  <div class="row text-center">
+                      <div class="col-lg-2"></div>
+                      <form action="/campgrounds/<%=campground._id%>/comments/<%=comment._id%>?_method=PUT" method="POST" class="col-lg-8">
+                          <div class="form-group">
+                            <textarea rows='3' class="form-control" name="comment[text]" placeholder='Comment text' required><%=comment.text%></textarea>
+                          </div>
+                          <div class="form-group">
+                            <button class="btn btn-lg btn-success btn-block">Submit</button>
+                          </div>
+                      </form>
+                      <div class="col-lg-2"></div>
+                  </div>
+              </div>
+            <% } %>
           </div>
         <% }) %>
       </div>

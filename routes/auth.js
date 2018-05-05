@@ -3,8 +3,6 @@ var router = express.Router()
 
 var passport = require("passport")
 
-var Comment = require('../models/comment')
-var Camp = require('../models/camp')
 var User = require('../models/user')
 
 // AUTH ROUTES ================================================================================================
@@ -49,13 +47,5 @@ router.get('/logout', function(req, res) {
   req.logout()
   res.redirect('/')
 })
-// FUNCTIONS ==================================================================================================
-
-function isLogedIn(req, res, next) {
-  if (req.isAuthenticated()) {
-    return next()
-  }
-  res.redirect('/login')
-}
 
 module.exports = router

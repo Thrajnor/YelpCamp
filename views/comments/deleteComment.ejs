@@ -1,0 +1,12 @@
+<% include ../partials/header %>
+
+<script> alert('Are your sure you want to delete your own comment ?') </script>
+
+<div class='container text-center mt-8'>
+  <h1 id='delete'>After This button there is no turning back</h1>
+  <form action='/campgrounds/<%=id%>/comments/<%=comment_id%>?_method=DELETE' method='POST'>
+    <button class='btn btn-md btn-danger'>DELETE COMMENT</button>
+  </form>
+</div>
+
+<% include ../partials/footer %>

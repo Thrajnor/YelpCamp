@@ -4,6 +4,7 @@ var router = express.Router()
 var Comment = require('../models/comment')
 var Camp = require('../models/camp')
 var User = require('../models/user')
+var middleware = require('../middleware')
 
 // CAMPGROUNDS ROUTES =========================================================================================
 
@@ -24,11 +25,11 @@ router.get('/campgrounds', function(req, res) {
 
 // CREATE ROUTE =======================================
 
-router.get('/campgrounds/new', isLogedIn, function(req, res) {
+router.get('/campgrounds/new', middleware.isLogedIn, function(req, res) {
   res.render('campgrounds/new')
 })
 
-router.post('/campgrounds', isLogedIn, function(req, res) {
+router.post('/campgrounds', middleware.isLogedIn, function(req, res) {
   req.body.camp.desc = req.sanitize(req.body.camp.desc)
   req.body.camp.author = {
     id: req.user._id,
@@ -62,7 +63,7 @@ router.get('/campgrounds/:id', function(req, res) {
 
 // EDIT ROUTE =========================================
 
-router.post('/campgrounds/:id/edit', checkCampgroundOwnership, function(req, res) {
+router.put('/campgrounds/:id', middleware.checkCampgroundOwnership, function(req, res) {
   req.body.camp.desc = req.sanitize(req.body.camp.desc)
   Camp.findByIdAndUpdate(req.params.id, req.body.camp, function(err, camp) {
     if (err) {
@@ -76,13 +77,13 @@ router.post('/campgrounds/:id/edit', checkCampgroundOwnership, function(req, res
 
 // DELETE ROUTE =======================================
 
-router.get('/campgrounds/:id/delete', checkCampgroundOwnership, function(req, res) {
+router.get('/campgrounds/:id/delete', middleware.checkCampgroundOwnership, function(req, res) {
   res.render('campgrounds/delete', {
     id: req.params.id
   })
 })
 
-router.delete('/campgrounds/:id', checkCampgroundOwnership, function(req, res) {
+router.delete('/campgrounds/:id', middleware.checkCampgroundOwnership, function(req, res) {
   Camp.findByIdAndRemove(req.params.id, function(err) {
     if (err) {
       res.send(alert('Your camground cannot be delete right now, try again later'))
@@ -111,33 +112,5 @@ router.search('/campgrounds', function(req, res) {
     }
   })
 })
-
-function checkCampgroundOwnership(req, res, next) {
-  if (req.isAuthenticated()) {
-    Camp.findById(req.params.id, function(err, camp) {
-      if (err) {
-        console.log(err)
-      }
-      else {
-        if (camp.author.id.equals(req.user.id)) {
-          next()
-        }
-        else {
-          res.redirect('back')
-        }
-      }
-    })
-  }
-  else {
-    res.redirect('back')
-  }
-}
-
-function isLogedIn(req, res, next) {
-  if (req.isAuthenticated()) {
-    return next()
-  }
-  res.redirect('back')
-}
 
 module.exports = router
