@@ -15,17 +15,20 @@ router.post('/campgrounds/:id/comment', middleware.isLogedIn, function(req, res)
   req.body.comment.text = req.sanitize(req.body.comment.text)
   Comment.create(req.body.comment, function(err, comment) {
     if (err) {
-      return console.log(err)
+      req.flash('error', "Can't Create Comment!")
+      res.redirect('back')
     }
     else {
       Camp.findById(req.params.id, function(err, camp) {
         if (err) {
-          console.log(err)
+          req.flash('error', "Can't Find Campground!")
+          res.redirect('back')
         }
         else {
           User.findById(req.user._id, function(err, user) {
             if (err) {
-              console.log(err)
+              req.flash('error', "Can't Find User!")
+              res.redirect('back')
             }
             else {
               // user push
@@ -38,6 +41,7 @@ router.post('/campgrounds/:id/comment', middleware.isLogedIn, function(req, res)
               // camp push
               camp.comments.push(comment)
               camp.save()
+              req.flash('success', "Comment Created!")
               res.redirect('/campgrounds/' + req.params.id)
             }
           })
@@ -59,9 +63,11 @@ router.get('/campgrounds/:id/comments/:comment_id/delete', middleware.checkComme
 router.delete('/campgrounds/:id/comments/:comment_id', middleware.checkCommentOwnership, function(req, res) {
   Comment.findByIdAndRemove(req.params.comment_id, function(err) {
     if (err) {
-      console.log(err)
+      req.flash('error', 'Comment Not Found!')
+      res.redirect('back')
     }
     else {
+      req.flash('success', 'Comment Deleted!')
       res.redirect('/campgrounds/' + req.params.id)
     }
   })
@@ -73,19 +79,14 @@ router.put('/campgrounds/:id/comments/:comment_id', middleware.checkCommentOwner
   req.body.comment.text = req.sanitize(req.body.comment.text)
   Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment, function(err, comment) {
     if (err) {
-      return console.log(err)
+      req.flash('error', 'Comment Not Found!')
+      res.redirect('back')
     }
     else {
+      req.flash('success', 'Comment Edited!')
       res.redirect('/campgrounds/' + req.params.id)
     }
   })
 })
-
-function isLogedIn(req, res, next) {
-  if (req.isAuthenticated()) {
-    return next()
-  }
-  res.redirect('/login')
-}
 
 module.exports = router

@@ -13,7 +13,8 @@ var middleware = require('../middleware')
 router.get('/campgrounds', function(req, res) {
   Camp.find({}, function(err, campgrounds) {
     if (err) {
-      return console.log(err)
+      req.flash('error', "Campgrounds Not Found")
+      res.redirect('back')
     }
     else {
       res.render('campgrounds/index', {
@@ -37,10 +38,12 @@ router.post('/campgrounds', middleware.isLogedIn, function(req, res) {
   }
   Camp.create(req.body.camp, function(err, camp) {
     if (err) {
-      return console.log(err)
+      req.flash('error', "Can't Create Campground")
+      res.redirect('back')
     }
     else {
       // redirect
+      req.flash('success', "Campground Created Successfully")
       res.redirect('/campgrounds/' + camp._id)
     }
   })
@@ -51,7 +54,8 @@ router.post('/campgrounds', middleware.isLogedIn, function(req, res) {
 router.get('/campgrounds/:id', function(req, res) {
   Camp.findById(req.params.id).populate('comments').exec(function(err, foundCampground) {
     if (err) {
-      return console.log(err)
+      req.flash('error', "Campground Not Found")
+      res.redirect('back')
     }
     else {
       res.render('campgrounds/show', {
@@ -67,9 +71,11 @@ router.put('/campgrounds/:id', middleware.checkCampgroundOwnership, function(req
   req.body.camp.desc = req.sanitize(req.body.camp.desc)
   Camp.findByIdAndUpdate(req.params.id, req.body.camp, function(err, camp) {
     if (err) {
-      return console.log(err)
+      req.flash('error', "Campground Not Found")
+      res.redirect('back')
     }
     else {
+      req.flash('success', "Campground Edited Successfully")
       res.redirect('back')
     }
   })
@@ -86,10 +92,11 @@ router.get('/campgrounds/:id/delete', middleware.checkCampgroundOwnership, funct
 router.delete('/campgrounds/:id', middleware.checkCampgroundOwnership, function(req, res) {
   Camp.findByIdAndRemove(req.params.id, function(err) {
     if (err) {
-      res.send(alert('Your camground cannot be delete right now, try again later'))
-      return console.log(err)
+      req.flash('error', "Campground Not Found")
+      res.redirect('back')
     }
     else {
+      req.flash('success', 'Campground Deleted')
       res.redirect('/campgrounds')
     }
   })
@@ -102,12 +109,14 @@ router.search('/campgrounds', function(req, res) {
     'name': req.body.search
   }, function(err, camp) {
     if (err) {
-      res.redirect('/campground')
+      req.flash('error', "Campground Not Found, search only by exact name sorry for inconvenience")
+      res.redirect('/campgounds')
     }
     else if (camp[0] != null) {
       return res.redirect('/campgrounds/' + camp[0]._id)
     }
     else {
+      req.flash('error', "Campground Not Found, search only by exact name sorry for inconvenience")
       res.redirect('/campgrounds')
     }
   })

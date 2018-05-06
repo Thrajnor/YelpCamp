@@ -1,29 +1,26 @@
 <% include ../partials/header %>
 
-<div class="container mt-8">
-    <h1 class="text-center py-3">Create New Campground</h1>
-    <div class="row text-center">
-        <div class="col-lg-4"></div>
-        <form action="/campgrounds" method="POST" class="col-lg-4">
-            <div class="form-group">
-                <input type="text" class="form-control" name="camp[name]" placeholder="Name of a camp" required>
-            </div>
-            <div class="form-group">
-                <input type="text" class="form-control" name="camp[image]" placeholder="url of an image" required>
-            </div>
-            <div class="form-group">
-                <textarea rows='4' class="form-control" name="camp[desc]" placeholder='Description for your Camp' required></textarea>
-            </div>
-            <div class="form-group">
-                <button class="btn btn-lg btn-success btn-block">Submit</button>
-            </div>
-            <div class="form-group">
-                <p><a href="/campgrounds" class="btn btn-md btn-dark btn-block">Go Back</a></p>
-            </div>
-        </form>
-        <div class="col-lg-4"></div>
-    </div>
-    
+<h1 class="text-center py-3">Create New Campground</h1>
+<div class="row text-center">
+    <div class="col-lg-4"></div>
+    <form action="/campgrounds" method="POST" class="col-lg-4">
+        <div class="form-group">
+            <input type="text" class="form-control" name="camp[name]" placeholder="Name of a camp" required>
+        </div>
+        <div class="form-group">
+            <input type="text" class="form-control" name="camp[image]" placeholder="url of an image" required>
+        </div>
+        <div class="form-group">
+            <textarea rows='4' class="form-control" name="camp[desc]" placeholder='Description for your Camp' required></textarea>
+        </div>
+        <div class="form-group">
+            <button class="btn btn-lg btn-success btn-block">Submit</button>
+        </div>
+        <div class="form-group">
+            <p><a href="/campgrounds" class="btn btn-md btn-dark btn-block">Go Back</a></p>
+        </div>
+    </form>
+    <div class="col-lg-4"></div>
 </div>
 
 <% include ../partials/footer %> 

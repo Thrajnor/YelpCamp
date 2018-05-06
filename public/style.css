@@ -35,6 +35,9 @@ a:hover {
     padding: 0.5em;
     font-size: 0.5em;
 }
+.mb-- {
+    margin-bottom: -5em;
+}
 
 /*SHOW PAGE ====================================================================*/
 #delete {

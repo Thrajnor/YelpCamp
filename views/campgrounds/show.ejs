@@ -1,104 +1,102 @@
 <% include ../partials/header %>
 
-<div class="container mt-8">
-  <div class="row" style="display:flex; flex-wrap:wrap;">
-    <div class='col-lg-3 col-md-12 mb-3'>
-      <p class='lead text-left'>YelpCamp</p>
-      <ul class='list-group'>
-        <li class='list-group-item active'>Item 1</li>
-        <li class='list-group-item'>Item 2</li>
-        <li class='list-group-item'>Item 3</li>
-      </ul>
-      <div id="map"></div>
-    </div>
-    <div class="col-lg-9 col-md-12">
-      <!--CAMPGROUND BODY =========================================================================-->
-      <div class="img-thumbnail">
-        <div id='imageContainer'>
-          <img class="img-responsive" id='image' src="<%= campground.image %>">
-        </div>
-        <div class='caption-full text-center p-3 pb-4'>
-          <span>
-            <a><h4 class='float-left text-left'><%= campground.name %></h4></a>
-            <h4 class='text-right'>$9.00/night</h4>
-          </span>
-          <p><%- campground.desc %></p>
-        <!--EDIT AND DELETE BUTTONS=========================-->
-            <div>
-                <% if (currentUser && currentUser.id == campground.author.id) {%>
-                  <span class='float-left'><a href='/campgrounds/<%=campground._id%>/delete' class='btn btn-sm btn-danger ml-3'>DELETE</a></span>
-                  <span class='float-right'><button id="editButton" class="btn btn-sm btn-warning mr-3">EDIT</button></span>
-                <% } %>
-                <p class='text-center m-auto pt-1 font-italic'>By <%= campground.author.username %></p>
-            </div>
-        </div>
-        <!--EDIT CAMPGROUND=================================-->
-        <div class="showForm" id="editForm">
-            <h3 class="text-center py-3">Edit your Campground</h3>
-            <div class="row text-center">
-                <div class="col-lg-2"></div>
-                <form action="/campgrounds/<%=campground._id%>?_method=PUT" method="POST" class="col-lg-8">
-                    <div class="form-group">
-                      <input type="text" class="form-control" name="camp[name]" placeholder="Name of a camp" value="<%=campground.name%>" required>
-                    </div>
-                    <div class="form-group">
-                      <input type="text" class="form-control" name="camp[image]" placeholder="Url of an image" value="<%=campground.image%>" required>
-                    </div>
-                    <div class="form-group">
-                      <textarea rows='4' class="form-control" name="camp[desc]" placeholder='Description for your Camp' required><%=campground.desc%></textarea>
-                    </div>
-                    <div class="form-group">
-                      <button class="btn btn-lg btn-success btn-block">Submit</button>
-                    </div>
-                </form>
-                <div class="col-lg-2"></div>
-            </div>
-        </div>
+<div class="row" style="display:flex; flex-wrap:wrap;">
+  <div class='col-lg-3 col-md-12 mb-3'>
+    <p class='lead text-left'>YelpCamp</p>
+    <ul class='list-group'>
+      <li class='list-group-item active'>Item 1</li>
+      <li class='list-group-item'>Item 2</li>
+      <li class='list-group-item'>Item 3</li>
+    </ul>
+    <div id="map"></div>
+  </div>
+  <div class="col-lg-9 col-md-12">
+    <!--CAMPGROUND BODY =========================================================================-->
+    <div class="img-thumbnail">
+      <div id='imageContainer'>
+        <img class="img-responsive" id='image' src="<%= campground.image %>">
       </div>
-      <!--COMMENT SECTION==========================================================================-->
-      <div class='p-3 mb-2 text-center' id='commentsection'>
-        <!--LEAVE A REVIEW =================================-->
-        <div class='text-right'>
-          <button id='commentButton' class="btn btn-md btn-success mr-3">Leave a Review</button>
-        </div>
-        <form action="/campgrounds/<%=campground._id%>/comment" method="POST" class='img-thumbnail img-fluid p-2 mt-3 showForm' id='commentForm'>
-          <div class="form-group">
-            <textarea rows='3' class="form-control" name="comment[text]" placeholder='Your comment' required></textarea>
+      <div class='caption-full text-center p-3 pb-4'>
+        <span>
+          <a><h4 class='float-left text-left'><%= campground.name %></h4></a>
+          <h4 class='text-right'>$9.00/night</h4>
+        </span>
+        <p><%- campground.desc %></p>
+      <!--EDIT AND DELETE BUTTONS=========================-->
+          <div>
+              <% if (currentUser && currentUser.id == campground.author.id) {%>
+                <span class='float-left'><a href='/campgrounds/<%=campground._id%>/delete' class='btn btn-sm btn-danger ml-3'>DELETE</a></span>
+                <span class='float-right'><button id="editButton" class="btn btn-sm btn-warning mr-3">EDIT</button></span>
+              <% } %>
+              <p class='text-center m-auto pt-1 font-italic'>By <%= campground.author.username %></p>
           </div>
-          <div class="form-group">
-            <button class="btn btn-lg btn-success btn-block" >Submit</button>
-          </div>
-        </form>
-        <!--COMMENTS =======================================-->
-        <% campground.comments.forEach(function (comment) { %>
-          <div class="position-relative img-thumbnail img-fluid mt-3">
-            <!--COMMENT BODY ===============================-->
-            <h3><strong><%=comment.author.username%></strong></h3>
-            <p class='px-2'><%-comment.text%></p>
-            <!--COMMENT BUTTONS=============================-->
-            <% if (currentUser && currentUser.id == comment.author.id) { %>
-              <div class='position-absolute m-1' id="commentDeleteButton"><a href='/campgrounds/<%=campground._id%>/comments/<%=comment._id%>/delete' class='btn btn-sm btn-danger'>DELETE</a></div>
-              <div class='position-absolute m-1 mt-2' id="commentEditButton"><button id="commentEditButton" class="btn btn-sm btn-warning">EDIT</button></div>
-              <!--EDIT COMMENT==============================-->
-              <div class="showForm" id="commentEditForm">
-                  <h3 class="text-center py-3">Edit your comment</h3>
-                  <div class="row text-center">
-                      <div class="col-lg-2"></div>
-                      <form action="/campgrounds/<%=campground._id%>/comments/<%=comment._id%>?_method=PUT" method="POST" class="col-lg-8">
-                          <div class="form-group">
-                            <textarea rows='3' class="form-control" name="comment[text]" placeholder='Comment text' required><%=comment.text%></textarea>
-                          </div>
-                          <div class="form-group">
-                            <button class="btn btn-lg btn-success btn-block">Submit</button>
-                          </div>
-                      </form>
-                      <div class="col-lg-2"></div>
+      </div>
+      <!--EDIT CAMPGROUND=================================-->
+      <div class="showForm" id="editForm">
+          <h3 class="text-center py-3">Edit your Campground</h3>
+          <div class="row text-center">
+              <div class="col-lg-2"></div>
+              <form action="/campgrounds/<%=campground._id%>?_method=PUT" method="POST" class="col-lg-8">
+                  <div class="form-group">
+                    <input type="text" class="form-control" name="camp[name]" placeholder="Name of a camp" value="<%=campground.name%>" required>
                   </div>
-              </div>
-            <% } %>
+                  <div class="form-group">
+                    <input type="text" class="form-control" name="camp[image]" placeholder="Url of an image" value="<%=campground.image%>" required>
+                  </div>
+                  <div class="form-group">
+                    <textarea rows='4' class="form-control" name="camp[desc]" placeholder='Description for your Camp' required><%=campground.desc%></textarea>
+                  </div>
+                  <div class="form-group">
+                    <button class="btn btn-lg btn-success btn-block">Submit</button>
+                  </div>
+              </form>
+              <div class="col-lg-2"></div>
           </div>
-        <% }) %>
       </div>
+    </div>
+    <!--COMMENT SECTION==========================================================================-->
+    <div class='p-3 mb-2 text-center' id='commentsection'>
+      <!--LEAVE A REVIEW =================================-->
+      <div class='text-right'>
+        <button id='commentButton' class="btn btn-md btn-success mr-3">Leave a Review</button>
+      </div>
+      <form action="/campgrounds/<%=campground._id%>/comment" method="POST" class='img-thumbnail img-fluid p-2 mt-3 showForm' id='commentForm'>
+        <div class="form-group">
+          <textarea rows='3' class="form-control" name="comment[text]" placeholder='Your comment' required></textarea>
+        </div>
+        <div class="form-group">
+          <button class="btn btn-lg btn-success btn-block" >Submit</button>
+        </div>
+      </form>
+      <!--COMMENTS =======================================-->
+      <% campground.comments.forEach(function (comment) { %>
+        <div class="position-relative img-thumbnail img-fluid mt-3">
+          <!--COMMENT BODY ===============================-->
+          <h3><strong><%=comment.author.username%></strong></h3>
+          <p class='px-2'><%-comment.text%></p>
+          <!--COMMENT BUTTONS=============================-->
+          <% if (currentUser && currentUser.id == comment.author.id) { %>
+            <div class='position-absolute m-1' id="commentDeleteButton"><a href='/campgrounds/<%=campground._id%>/comments/<%=comment._id%>/delete' class='btn btn-sm btn-danger'>DELETE</a></div>
+            <div class='position-absolute m-1 mt-2' id="commentEditButton"><button id="commentEditButton" class="btn btn-sm btn-warning">EDIT</button></div>
+            <!--EDIT COMMENT==============================-->
+            <div class="showForm" id="commentEditForm">
+                <h3 class="text-center py-3">Edit your comment</h3>
+                <div class="row text-center">
+                    <div class="col-lg-2"></div>
+                    <form action="/campgrounds/<%=campground._id%>/comments/<%=comment._id%>?_method=PUT" method="POST" class="col-lg-8">
+                        <div class="form-group">
+                          <textarea rows='3' class="form-control" name="comment[text]" placeholder='Comment text' required><%=comment.text%></textarea>
+                        </div>
+                        <div class="form-group">
+                          <button class="btn btn-lg btn-success btn-block">Submit</button>
+                        </div>
+                    </form>
+                    <div class="col-lg-2"></div>
+                </div>
+            </div>
+          <% } %>
+        </div>
+      <% }) %>
     </div>
   </div>
 </div>
