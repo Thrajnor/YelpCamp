@@ -35,7 +35,8 @@ app.use(express.static('public'))
 app.use(methodOverride('_method'))
 app.use(expressSanitizer('_method'))
 
-mongoose.connect('mongodb://localhost/yelp_camp')
+// mongoose.connect('mongodb://localhost/yelp_camp')
+mongoose.connect('mongodb://Thrajnor:7757@ds016098.mlab.com:16098/marcinyelpcamp')
 
 app.use(require("express-session")({
   secret: 'Natalia is again the best',
