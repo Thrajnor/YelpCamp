@@ -14,7 +14,7 @@ router.get('/campgrounds', function(req, res) {
   Camp.find({}, function(err, campgrounds) {
     if (err) {
       req.flash('error', "Campgrounds Not Found")
-      res.redirect('back')
+      res.redirect('/campgrounds')
     }
     else {
       res.render('campgrounds/index', {
@@ -39,7 +39,7 @@ router.post('/campgrounds', middleware.isLogedIn, function(req, res) {
   Camp.create(req.body.camp, function(err, camp) {
     if (err) {
       req.flash('error', "Can't Create Campground")
-      res.redirect('back')
+      res.redirect('/campgrounds')
     }
     else {
       // redirect
@@ -55,7 +55,7 @@ router.get('/campgrounds/:id', function(req, res) {
   Camp.findById(req.params.id).populate('comments').exec(function(err, foundCampground) {
     if (err) {
       req.flash('error', "Campground Not Found")
-      res.redirect('back')
+      res.redirect('/campgrounds')
     }
     else {
       res.render('campgrounds/show', {
@@ -72,7 +72,7 @@ router.put('/campgrounds/:id', middleware.checkCampgroundOwnership, function(req
   Camp.findByIdAndUpdate(req.params.id, req.body.camp, function(err, camp) {
     if (err) {
       req.flash('error', "Campground Not Found")
-      res.redirect('back')
+      res.redirect('/campgrounds')
     }
     else {
       req.flash('success', "Campground Edited Successfully")

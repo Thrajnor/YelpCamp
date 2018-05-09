@@ -5,6 +5,7 @@ var campSchema = new mongoose.Schema({
   name: String,
   image: String,
   desc: String,
+  price: Number,
   comments: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Comment'

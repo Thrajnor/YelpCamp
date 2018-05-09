@@ -82,6 +82,14 @@ app.use(authRoutes)
 // =======================
 
 
+
+// WRONG ADRESS ROUTE ============
+app.get('*', function(req, res) {
+  res.render('wrong')
+})
+// ===============================
+
+
 // LISTEN FOR REQUESTS ========================================================================================
 
 app.listen(process.env.PORT, process.env.IP, function() {
