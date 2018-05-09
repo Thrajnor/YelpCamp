@@ -18,14 +18,14 @@ middlewareObj.checkCommentOwnership = function(req, res, next) {
           next()
         }
         else {
-          req.flash('error', "You Don't Have Permisson To Do That")
+          req.flash('error', "You don't have permisson to do that")
           res.redirect('back')
         }
       }
     })
   }
   else {
-    req.flash('error', 'Please Login First To Do That!')
+    req.flash('error', 'Please login first to do that!')
     res.redirect('/login')
   }
 }
@@ -42,14 +42,14 @@ middlewareObj.checkCampgroundOwnership = function(req, res, next) {
           next()
         }
         else {
-          req.flash('error', "You Don't Have Permisson To Do That")
+          req.flash('error', "You don't have permisson to do that")
           res.redirect('back')
         }
       }
     })
   }
   else {
-    req.flash('error', 'Please Login First To Do That!')
+    req.flash('error', 'Please login first to do that!')
     res.redirect('/login')
   }
 }
@@ -58,7 +58,7 @@ middlewareObj.isLogedIn = function(req, res, next) {
   if (req.isAuthenticated()) {
     return next()
   }
-  req.flash('error', 'Please Login First To Do That!')
+  req.flash('error', 'Please login first to do that!')
   res.redirect('/login')
 }
 
